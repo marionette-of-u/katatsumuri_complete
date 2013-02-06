@@ -11,7 +11,7 @@ Description
 
 clang\_complete の設定が難しすぎるので自分で簡易的な補完スクリプトを書いてみた.   
 namekuji\_complete とは違い libclang の組み込み binary ではなくコンパイラを直に呼び出している.   
-namekuji_complete.cpp をコンパイル, 実行できる環境 (C++11) と clang, neocomplcache (https://github.com/Shougo/neocomplcache) に依存.
+katatsumuri\_complete.cpp をコンパイル, 実行できる環境 (C++11) と clang, neocomplcache (https://github.com/Shougo/neocomplcache) に依存.
 
 Installation
 -----------
