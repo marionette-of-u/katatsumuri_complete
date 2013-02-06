@@ -29,14 +29,16 @@ int main(int argc, char *argv[]){
 
 #ifdef _MSC_VER
     const char *drop = "2> nul";
+#   define popen _popen
+#   define pclose _pclose
 #else
     const char *drop = "2> /dev/null";
 #endif
 
     std::string command = clang_path + " -cc1 -std=c++11  -fsyntax-only -code-completion-at=" + target_path + ":" + str_line + ":" + str_col + " " + target_path + " " + other_options + " " + drop;
 
-    auto pipe_deleter = [](std::FILE *pipe){ _pclose(pipe); };
-    std::unique_ptr<std::remove_pointer<std::FILE*>::type, decltype(pipe_deleter)> pipe(_popen(command.c_str(), "r"));
+    auto pipe_deleter = [](std::FILE *pipe){ pclose(pipe); };
+    std::unique_ptr<std::remove_pointer<std::FILE*>::type, decltype(pipe_deleter)> pipe(popen(command.c_str(), "r"));
     if(!&*pipe){ return 0; }
 
     std::string log_line;
