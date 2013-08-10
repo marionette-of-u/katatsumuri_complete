@@ -27,13 +27,16 @@ Setting examples
 "---------------------------------------------------------------------------
 " namekuji_complete
 
-" katatsumuri_complete の実行形式ファイル
+" katatsumuri_complete の実行形式ファイル.
 let g:katatsumuri_complete_binary = 'C:/katatsumuri_complete/katatsumuri_complete.exe'
 
-" clang の実行形式ファイル
+" clang の実行形式ファイル.
 let g:katatsumuri_complete_clang_binary = 'C:/clang/clang.exe'
 
-" その他オプション
+" 同名の補完結果でも signature ごとに分ける場合は 1, そうでない場合は 0.
+let g:katatsumuri_complete_split_each_sig = 0
+
+" その他オプション.
 let g:katatsumuri_complete_opts = '-IC:/MinGW/msys/1.0/local/include -IC:/MinGW/lib/gcc/mingw32/4.7.2/include -IC:/MinGW/lib/gcc/mingw32/4.7.2/include/c++ -IC:/MinGW/lib/gcc/mingw32/4.7.2/include/c++/mingw32'
 
 
