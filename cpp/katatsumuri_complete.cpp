@@ -39,11 +39,10 @@ int main(int argc, char *argv[]){
         // <katatsumuri>
         signature_katatsumuri = "<katatsumuri>";
 
-
     // 補完表示最大数.
     int clang_output_line_length = std::atoi(argv[5]);
-    if(clang_output_line_length < 128){
-        clang_output_line_length = 128;
+    if(clang_output_line_length < 0x1000){
+        clang_output_line_length = 0x1000;
     }
     std::unique_ptr<char[]> buffer(new char[clang_output_line_length]);
 
@@ -68,7 +67,7 @@ int main(int argc, char *argv[]){
 #endif
 
     // clang を呼び出すための設定.
-    std::string command = clang_path + " -cc1 -std=c++11  -fsyntax-only -code-completion-at=" + target_path + ":" + str_line + ":" + str_col + " " + target_path + " " + other_options + " " + drop;
+    std::string command = clang_path + " -cc1 -std=c++11 -fsyntax-only -code-completion-at=" + target_path + ":" + str_line + ":" + str_col + " " + target_path + " " + other_options + " " + drop;
 
     // pipe の設定.
     auto pipe_deleter = [](std::FILE *pipe){
@@ -177,7 +176,7 @@ int main(int argc, char *argv[]){
         std::string menu = log_line.substr(i + 3, log_line.size() - i - 3);
         del(del(del(del(del(del(def(rep(menu, "typename", "class", 1)), "[#", 0), "#]", 1), "<#", 0), "#>", 0), "{#", 0), "#}", 0);
 
-        if(split_each_signature){        
+        if(split_each_signature){
             // 標準出力に結果を出力する.
             // 特に "<katatsumuri>" である必要はない.
             std::cout << signature_katatsumuri << word << "#" << menu;

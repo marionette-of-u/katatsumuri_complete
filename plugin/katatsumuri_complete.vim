@@ -37,7 +37,7 @@ function! KatatsumuriComplete(findstart, base)
     endtry
     let l:li = line('.')
     let l:co = col('.')
-    let l:cm = g:katatsumuri_complete_binary.' '.g:katatsumuri_complete_clang_binary.' '.l:tempfile.' '.l:li.' '.l:co.' 128 '.g:katatsumuri_complete_split_each_sig.' '.g:katatsumuri_complete_opts
+    let l:cm = g:katatsumuri_complete_binary.' '.g:katatsumuri_complete_clang_binary.' '.l:tempfile.' '.l:li.' '.l:co.' 2048 '.g:katatsumuri_complete_split_each_sig.' '.g:katatsumuri_complete_opts
     let l:clang_output = split(system(l:cm), "\n")
     call delete(l:tempfile)
     if len(l:clang_output) == 0
