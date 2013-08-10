@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
 
 
     // 補完表示最大数.
-    int clang_output_line_length = std::atoi(argv[6]);
+    int clang_output_line_length = std::atoi(argv[5]);
     if(clang_output_line_length < 128){
         clang_output_line_length = 128;
     }
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
 
     // 同名の補完ワードをシグネチャごとに分けて表示する場合は true.
     // そうでない場合は false.
-    const bool split_each_signature = std::atoi(argv[5]) > 0;
+    const bool split_each_signature = std::atoi(argv[6]) > 0;
 
     // 補完結果をひとつひとつ読み込む.
     while(!std::feof(&*pipe)){
