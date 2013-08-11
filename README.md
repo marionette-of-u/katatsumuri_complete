@@ -4,18 +4,19 @@
 Todo & etc...
 -----------
 
-* vimproc を使ってコマンドプロンプトで窓が出ないようにする.
+* kind 情報の追加.
 
 Description
 -----------
 
 clang\_complete の設定が難しすぎるので自分で簡易的な補完スクリプトを書いてみた.   
 namekuji\_complete とは違い libclang の組み込み binary ではなくコンパイラを直に呼び出している.   
-katatsumuri\_complete.cpp をコンパイル, 実行できる環境 (C++11) と clang, neocomplcache (https://github.com/Shougo/neocomplcache) に依存.
+katatsumuri\_complete.cpp をコンパイル, 実行できる環境 (C++11) と clang, vimproc, neocomplcache に依存.
 
 Installation
 -----------
 
+* vimprocを入れる.
 * plugin/katatsumuri_complete.vim を適切な場所に配置する.
 * cpp/katatsumuri_complete.cpp をコンパイルし実行ファイルを生成, 好きな場所に配置する.
 * .vimrc に後述する Setting examples に倣った設定を記述.
