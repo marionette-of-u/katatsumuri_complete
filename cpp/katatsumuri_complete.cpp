@@ -2,11 +2,22 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cctype>
+
+struct buffer_element{
+    buffer_element() : menu(), num(0){}
+
+    // menu.
+    std::string menu;
+    
+    // 他のメンバの数.
+    std::size_t num;
+};
 
 // 1.   clang 実行ファイルの path.
 // 2.   補完対象のファイルの path.
@@ -73,13 +84,13 @@ int main(int argc, char *argv[]){
     auto pipe_deleter = [](std::FILE *pipe){
         pclose(pipe);
     };
-    std::unique_ptr<std::remove_pointer<std::FILE*>::type, decltype(pipe_deleter)> pipe(popen(command.c_str(), "r"));
+    std::unique_ptr<std::remove_pointer<std::FILE*>::type, decltype(pipe_deleter)> pipe(popen(command.c_str(), "r"), pipe_deleter);
     if(!&*pipe){
         return 0;
     }
 
     std::string log_line;
-    std::map<std::string, std::string> buffer_map;
+    std::map<std::string, buffer_element> buffer_map;
 
     // 同名の補完ワードをシグネチャごとに分けて表示する場合は true.
     // そうでない場合は false.
@@ -115,7 +126,7 @@ int main(int argc, char *argv[]){
                     break;
                 }
                 str.erase(str.begin() + i, str.begin() + i + target.size());
-                // TypeName ∧ pointer ∧ reference で space の分だけ空白を入れる.
+                // TypeName ∧ !pointer ∧ !reference で space の分だけ空白を入れる.
                 if(space && str[i - 1] != '*' && str[i - 1] != '&'){
                     str.insert(i, " ");
                     ++i;
@@ -174,25 +185,32 @@ int main(int argc, char *argv[]){
 
         // 一連の処理を適用する.
         std::string menu = log_line.substr(i + 3, log_line.size() - i - 3);
-        del(del(del(del(del(del(def(rep(menu, "typename", "class", 1)), "[#", 0), "#]", 1), "<#", 0), "#>", 0), "{#", 0), "#}", 0);
+        del(del(del(del(del(del(del(def(rep(menu, "typename", "class", 1)), "[#", 0), "#]", 1), "<#", 0), "#>", 0), "{#", 0), "#}", 0), "\n", 0);
 
         if(split_each_signature){
             // 標準出力に結果を出力する.
             // 特に "<katatsumuri>" である必要はない.
-            std::cout << signature_katatsumuri << word << "#" << menu;
+            std::cout << signature_katatsumuri << word << "#" << menu << "\n";
         }else{
             // まだ出力しない.
-            if(!buffer_map[word].empty()){
-                buffer_map[word] += ", ";
+            buffer_element element;
+            element.menu = menu;
+            if(!buffer_map.insert(std::make_pair(word, element)).second){
+                ++buffer_map[word].num;
             }
-            buffer_map[word] += menu;
         }
     }
 
     // buffer_map の内容を出力する.
     if(!split_each_signature){
         for(auto iter = buffer_map.begin(); iter != buffer_map.end(); ++iter){
-            std::cout << signature_katatsumuri << iter->first << "#" << iter->second;
+            std::cout << signature_katatsumuri << iter->first << "#" << iter->second.menu;
+            if(iter->second.num > 0){
+                std::ostringstream oss;
+                oss << ", other " << iter->second.num << " member(s).";
+                std::cout << oss.str();
+            }
+            std::cout << "\n";
         }
     }
 
